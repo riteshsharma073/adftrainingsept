@@ -1,0 +1,17 @@
+{
+	"name": "DS_ASQL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ASQL_01",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "SalesLT",
+			"table": "Customer"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
