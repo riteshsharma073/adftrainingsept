@@ -18,12 +18,6 @@
 					"dataflow": {
 						"referenceName": "ProductDetails",
 						"type": "DataFlowReference",
-						"parameters": {
-							"MyTest": {
-								"value": "'@{Ritesh Sharma}'",
-								"type": "Expression"
-							}
-						},
 						"datasetParameters": {
 							"sourceProduct": {
 								"ContainerName": {
