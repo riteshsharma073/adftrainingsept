@@ -25,7 +25,21 @@
 						"referenceName": "DS_ADLS_CSV_GENERIC",
 						"type": "DatasetReference"
 					},
-					"name": "sinkProductDetails"
+					"name": "sinkRoadFrames"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_ADLS_CSV_GENERIC",
+						"type": "DatasetReference"
+					},
+					"name": "sinkWindow"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_ADLS_CSV_GENERIC",
+						"type": "DatasetReference"
+					},
+					"name": "sinkAgg"
 				}
 			],
 			"transformations": [
@@ -34,9 +48,29 @@
 				},
 				{
 					"name": "select1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "split1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "window1"
+				},
+				{
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     RoadFramesOutputFile as string,",
+				"     WindowOutput as string,",
+				"     AggOutput as string",
+				"}",
 				"source(output(",
 				"          ProductID as short,",
 				"          Name as string,",
@@ -85,14 +119,50 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 sink(allowSchemaDrift: true,",
+				"select1 derive(NewProductName = concat(ProductCategoryName,':',ProductName) ) ~> derivedColumn1",
+				"derivedColumn1 split(ProductCategoryName=='Road Frames',",
+				"     disjoint: false) ~> split1@(RoadFrames, Other)",
+				"split1@Other aggregate(groupBy(ProductCategoryName),",
+				"     CountProduct = count()) ~> aggregate1",
+				"split1@Other window(over(ProductCategoryName),",
+				"     asc(ProductName, true),",
+				"     Rnk = rowNumber()) ~> window1",
+				"window1 filter(Rnk==1) ~> filter1",
+				"split1@RoadFrames sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:[($RoadFramesOutputFile)],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> sinkProductDetails"
+				"     partitionBy('hash', 1)) ~> sinkRoadFrames",
+				"filter1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:[($WindowOutput)],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          ProductID,",
+				"          ProductName,",
+				"          ProductCategoryName,",
+				"          ProductNumber,",
+				"          Color,",
+				"          StandardCost,",
+				"          ListPrice,",
+				"          NewProductName",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> sinkWindow",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkAgg"
 			]
 		}
 	}
