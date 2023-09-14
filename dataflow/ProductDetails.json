@@ -37,6 +37,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     MyTest as string",
+				"}",
 				"source(output(",
 				"          ProductID as short,",
 				"          Name as string,",
@@ -91,7 +94,8 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sinkProductDetails"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sinkProductDetails"
 			]
 		}
 	}
