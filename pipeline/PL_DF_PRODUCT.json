@@ -18,6 +18,20 @@
 					"dataflow": {
 						"referenceName": "ProductDetails",
 						"type": "DataFlowReference",
+						"parameters": {
+							"RoadFramesOutputFile": {
+								"value": "'@{'OutputRoadFramesProduct.csv'}'",
+								"type": "Expression"
+							},
+							"WindowOutput": {
+								"value": "'@{'OutputSingleProductPerCategory.csv'}'",
+								"type": "Expression"
+							},
+							"AggOutput": {
+								"value": "'@{'OutputProductCountPerCategory.csv'}'",
+								"type": "Expression"
+							}
+						},
 						"datasetParameters": {
 							"sourceProduct": {
 								"ContainerName": {
@@ -41,7 +55,7 @@
 								},
 								"FileName": "ProductCategory.csv"
 							},
-							"sinkProductDetails": {
+							"sinkRoadFrames": {
 								"ContainerName": {
 									"value": "@pipeline().parameters.ContainerName",
 									"type": "Expression"
@@ -51,6 +65,28 @@
 									"type": "Expression"
 								},
 								"FileName": "OutputProductDetails.csv"
+							},
+							"sinkWindow": {
+								"ContainerName": {
+									"value": "@pipeline().parameters.ContainerName",
+									"type": "Expression"
+								},
+								"FolderPath": {
+									"value": "@pipeline().parameters.FolderPath",
+									"type": "Expression"
+								},
+								"FileName": "OutputWindow.csv"
+							},
+							"sinkAgg": {
+								"ContainerName": {
+									"value": "@pipeline().parameters.ContainerName",
+									"type": "Expression"
+								},
+								"FolderPath": {
+									"value": "@pipeline().parameters.FolderPath",
+									"type": "Expression"
+								},
+								"FileName": "OutputAgg.csv"
 							}
 						}
 					},
