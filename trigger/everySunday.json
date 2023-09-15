@@ -1,0 +1,25 @@
+{
+	"name": "everySunday",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "PL_VARIABLE",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 3,
+				"startTime": "2023-09-15T05:10:00",
+				"endTime": "2023-09-15T11:00:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}
