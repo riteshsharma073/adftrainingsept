@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf1000069109"
+		},
+		"LS_ADLS_01_accountKey": {
+			"value": ""
+		},
+		"LS_ASQL_01_connectionString": {
+			"value": ""
+		},
+		"DS_HTTP_properties_typeProperties_url": {
+			"value": "https://github.com/datablist/sample-csv-files/tree/main/files/"
+		},
+		"LS_ADLS_01_properties_typeProperties_url": {
+			"value": "https://adls1000069109.dfs.core.windows.net/"
+		}
+	}
+}

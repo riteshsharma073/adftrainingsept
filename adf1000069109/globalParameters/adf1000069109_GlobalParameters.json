@@ -1,0 +1,6 @@
+{
+	"ContainerName": {
+		"type": "string",
+		"value": "raw"
+	}
+}
