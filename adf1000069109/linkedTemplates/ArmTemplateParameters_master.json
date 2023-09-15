@@ -17,6 +17,9 @@
 		"LS_ADLS_01_properties_typeProperties_url": {
 			"value": "https://adls1000069109.dfs.core.windows.net/"
 		},
+		"trigger2_properties_typeProperties_scope": {
+			"value": "/subscriptions/390bd210-33e0-4b8f-b7d6-764938e92b79/resourceGroups/1000069109_RG/providers/Microsoft.Storage/storageAccounts/adls1000069109"
+		},
 		"containerUri": {
 			"value": ""
 		},
