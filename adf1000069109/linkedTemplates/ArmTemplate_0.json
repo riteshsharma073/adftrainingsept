@@ -459,9 +459,9 @@
 				"typeProperties": {
 					"recurrence": {
 						"frequency": "Minute",
-						"interval": 3,
+						"interval": 1,
 						"startTime": "2023-09-15T05:10:00",
-						"endTime": "2023-09-15T11:00:00",
+						"endTime": "2023-09-22T11:00:00",
 						"timeZone": "India Standard Time"
 					}
 				}
