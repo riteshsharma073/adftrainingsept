@@ -1,5 +1,13 @@
 {
 	"name": "adf1000069109",
+	"properties": {
+		"globalParameters": {
+			"ContainerName": {
+				"type": "string",
+				"value": "raw"
+			}
+		}
+	},
 	"location": "centralindia",
 	"identity": {
 		"type": "SystemAssigned",

@@ -3,21 +3,21 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Lookup1",
+				"name": "Lookup Tables",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
-					"retry": 0,
+					"retry": 1,
 					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
+					"secureOutput": true,
+					"secureInput": true
 				},
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT Top 1 * FROM INFORMATION_SCHEMA.TABLES\nWHERE TABLE_TYPE='BASE TABLE'",
+						"sqlReaderQuery": "SELECT  * FROM INFORMATION_SCHEMA.TABLES\nWHERE TABLE_TYPE='BASE TABLE'",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -33,7 +33,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup1",
+						"activity": "Lookup Tables",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -42,7 +42,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup1').output.value",
+						"value": "@activity('Lookup Tables').output.value",
 						"type": "Expression"
 					},
 					"activities": [
@@ -52,8 +52,8 @@
 							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
+								"retry": 1,
+								"retryIntervalInSeconds": 60,
 								"secureOutput": false,
 								"secureInput": false
 							},
@@ -61,12 +61,13 @@
 							"typeProperties": {
 								"source": {
 									"type": "AzureSqlSource",
-									"sqlReaderQuery": {
-										"value": "@concat('SELECT * FROM ',item().TABLE_SCHEMA,'.',item().Table_NAME)",
-										"type": "Expression"
-									},
 									"queryTimeout": "02:00:00",
-									"partitionOption": "None"
+									"partitionOption": "DynamicRange",
+									"partitionSettings": {
+										"partitionColumnName": "Customer_ID",
+										"partitionUpperBound": "",
+										"partitionLowerBound": ""
+									}
 								},
 								"sink": {
 									"type": "DelimitedTextSink",
@@ -80,6 +81,9 @@
 									}
 								},
 								"enableStaging": false,
+								"parallelCopies": 4,
+								"enableSkipIncompatibleRow": false,
+								"validateDataConsistency": false,
 								"translator": {
 									"type": "TabularTranslator",
 									"typeConversion": true,
@@ -97,8 +101,19 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "DS_ADLS_CSV",
-									"type": "DatasetReference"
+									"referenceName": "DS_ADLS_CSV_GENERIC",
+									"type": "DatasetReference",
+									"parameters": {
+										"ContainerName": "raw",
+										"FolderPath": {
+											"value": "@item().TABLE_SCHEMA",
+											"type": "Expression"
+										},
+										"FileName": {
+											"value": "@concat(item().Table_NAME,'.csv')",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
